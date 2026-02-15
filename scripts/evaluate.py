@@ -35,18 +35,18 @@ def compare_and_plot():
     # 1. Run FCFS
     fcfs_sched = FCFS(n_processes=n_proc)
     fcfs_results = fcfs_sched.run()
-    fcfs_wait = np.mean([p.completion_time - p.start_wall_time - p.burst_time for p in fcfs_results])
+    fcfs_wait = np.mean([p.completion_time - p.start_wall_time - p.last_cpu_time for p in fcfs_results])
     
     # 2. Run RR
     rr_sched = RR(n_processes=n_proc, quantum=0.2)
     rr_results = rr_sched.run()
-    rr_wait = np.mean([p.completion_time - p.start_wall_time - p.burst_time for p in rr_results])
+    rr_wait = np.mean([p.completion_time - p.start_wall_time - p.last_cpu_time for p in rr_results])
     
     # 3. Run RL
     model_path = "ppo_scheduler"
     if os.path.exists(model_path + ".zip"):
         rl_results = evaluate_rl(model_path, n_processes=n_proc)
-        rl_wait = np.mean([p.completion_time - p.start_wall_time - p.burst_time for p in rl_results])
+        rl_wait = np.mean([p.completion_time - p.start_wall_time - p.last_cpu_time for p in rl_results])
     else:
         print("RL model not found. Run scripts/train.py first.")
         rl_wait = 0

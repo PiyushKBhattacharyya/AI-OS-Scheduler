@@ -14,13 +14,15 @@ class ManagedProcess:
         self.start_wall_time = time.time()
         self.completion_time = None
         self.is_finished = False
+        self.last_cpu_time = 0.0
 
     def get_cpu_time(self):
         try:
             times = self.handle.cpu_times()
-            return times.user + times.system
+            self.last_cpu_time = times.user + times.system
+            return self.last_cpu_time
         except (psutil.NoSuchProcess, psutil.AccessDenied):
-            return 0.0
+            return self.last_cpu_time
 
     def get_status(self):
         try:
