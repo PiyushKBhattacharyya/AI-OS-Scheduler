@@ -2,17 +2,23 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 import time
+import os
+import sys
 from typing import List, Optional
-from process_manager import ProcessManager, ManagedProcess
 
-class RealProcessEnv(gym.Env):
+# Add project root to path for modular imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from src.core.process_manager import ProcessManager, ManagedProcess
+
+class ProcessEnv(gym.Env):
     """
     Gymnasium environment for real-time CPU scheduling.
     Actions: Select a process to run for a short 'tick' duration.
     State: CPU time used, wait time, and remaining burst estimate.
     """
     def __init__(self, max_queue_size: int = 5, tick_duration: float = 0.5):
-        super(RealProcessEnv, self).__init__()
+        super(ProcessEnv, self).__init__()
         self.max_queue_size = max_queue_size
         self.tick_duration = tick_duration # Real-time seconds the process is resumed
         
